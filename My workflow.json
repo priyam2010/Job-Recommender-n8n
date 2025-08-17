@@ -1,0 +1,453 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        0
+      ],
+      "id": "8434c794-afa6-44e3-af01-8f84f315699f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/eWLn1bVYxOsbiylj.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        0
+      ],
+      "id": "1ad0c82a-66fc-4024-a416-1b106b488d38",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1nBtwVXKvXleXcui5_Y6or55rkbYBiOEa30OaPjKqbW4",
+          "mode": "list",
+          "cachedResultName": "Linkedin Job listings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nBtwVXKvXleXcui5_Y6or55rkbYBiOEa30OaPjKqbW4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nBtwVXKvXleXcui5_Y6or55rkbYBiOEa30OaPjKqbW4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $json.title }}",
+            "Date": "={{ $json.pubDate }}",
+            "link ": "={{ $json.link }}",
+            "Job Description": "={{ $json.content }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Description",
+              "displayName": "Job Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link ",
+              "displayName": "link ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Rating",
+              "displayName": "Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Comapny Name",
+              "displayName": "Comapny Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Benefits",
+              "displayName": "Benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Description",
+              "displayName": "Job Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cover Letter",
+              "displayName": "Cover Letter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1536,
+        0
+      ],
+      "id": "fa125995-6d50-4086-b762-a4e2f3b0c94c",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eQG0HW1eo1gBJrJN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "68d87cf6-2615-4284-ab59-9291a340d345",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "url": "https://www.linkedin.com/jobs/search/?currentJobid=426808547&distance=25&geold=102713980&keywords=data%20scientist&origin=JOBS_HOME_KEYWORD_HISTORY&refresh=true",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "f345b429-fcde-4b8b-8261-1765b615f07e",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "you are in system role; you are an intelligent bot capable of pulling out data from a job listing site."
+            },
+            {
+              "content": "=here is the job site :  {{ $json.data }}"
+            },
+            {
+              "content": "your role is assistant, please output the data in JSON format, using following structure \n{\n\"Company Name\":\"\"\n\"Benefits\":\"\"\n\"Job Description\":\"\",// please make it 200 character or less\n\"Location\":\"\"",
+              "role": "model"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        48,
+        0
+      ],
+      "id": "5f196846-bf61-4e34-84a7-e278f6ad51ac",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "67HDJCH3eLlK8J8f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// wrapped object\nconst data = {\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": \"...\\n[ { \\\"Company Name\\\": \\\"Starbucks\\\", \\\"Benefits\\\": \\\"Actively Hiring\\\", \\\"Job Description\\\": \\\"data scientist, Staffing- Data & Analytics (Seattle)\\\", \\\"Location\\\": \\\"Seattle, WA\\\" }, { \\\"Company Name\\\": \\\"Netflix\\\", \\\"Benefits\\\": \\\"Actively Hiring\\\", \\\"Job Description\\\": \\\"Data Scientist (L5) - Customer Service\\\", \\\"Location\\\": \\\"United States\\\" } ]\"\n      }\n    ],\n    \"role\": \"model\"\n  },\n  \"finishReason\": \"STOP\",\n  \"index\": 0\n};\n\n// ✅ Step 1: extract raw string\nlet rawText = data.content.parts[0].text;\n\n// ✅ Step 2: keep only the JSON array part (from [ ... ])\nconst match = rawText.match(/\\[.*\\]/s);  // `s` allows newlines inside\nif (!match) {\n  throw new Error(\"No JSON array found in text!\");\n}\nconst cleanJson = match[0];\n\n// ✅ Step 3: parse safely\nconst jobs = JSON.parse(cleanJson);\n\n// ✅ Step 4: now jobs is a clean array of objects\nconsole.log(jobs);\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        0
+      ],
+      "id": "4fe836a5-39d1-41c3-a40a-1eb4adedf3fc",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "your role is System, you're in system message mode, you're an intelligent bot rating how closely a job listing is to a candidate skill set, on a 5 score.\nGive the following points:\na) 3 points for skills matching, 1 point for mostly matching\nb) 1 point for it being the right experience level\nc) 1 point for it being a remote position\nd) 1 point if past job experience matches the job role\ne) 1 point if the skills on the resume align with the job\nf) 3 points if I meet that job qualification",
+              "role": "model"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        528,
+        0
+      ],
+      "id": "0eff9256-1a30-4192-98bb-05088d4ce310",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "67HDJCH3eLlK8J8f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "76b72008-f337-4e4b-aa2c-0dda09b449b6",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "4684d25a-a464-4357-83c5-edc1c083f12e",
+      "name": "Message a model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "67HDJCH3eLlK8J8f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "ee5b60cc-cfa5-4319-89c8-9ab8d5e7dc57",
+      "name": "Code2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        []
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c882aa3a-d385-4da2-9c42-822bb8b1e1bf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "db9e0fa5ae52aba63277dd1acb3b789d271cf41e8a99d4128af16d44054c7be3"
+  },
+  "id": "yBBaXcD96ohrUsFM",
+  "tags": []
+}
